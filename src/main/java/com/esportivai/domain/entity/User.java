@@ -1,4 +1,4 @@
-package com.esportivai_api.domain.entity;
+package com.esportivai.domain.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
@@ -9,9 +9,13 @@ import lombok.Data;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(name = "user_id")
+    private Long userId;
     private String name;
+    private String birthDate;
     private String email;
     private String password;
     private String phone;
+    @Column(name = "skill_level")
+    private String skillLevel;
 }

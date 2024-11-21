@@ -1,6 +1,6 @@
-package com.esportivai_api.domain.repository;
+package com.esportivai.domain.repository;
 
-import com.esportivai_api.domain.entity.Participation;
+import com.esportivai.domain.entity.Participation;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ParticipationRepository extends JpaRepository<Participation, Long> {

@@ -1,7 +1,7 @@
-package com.esportivai_api.controller;
+package com.esportivai.controller;
 
-import com.esportivai_api.application.usecase.UserService;
-import com.esportivai_api.domain.entity.User;
+import com.esportivai.application.usecase.UserService;
+import com.esportivai.domain.entity.User;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -26,12 +26,7 @@ public class UserController {
         return userService.getUserById(String.valueOf(id));
     }
 
-    @PostMapping("/auth/register")
-    public User createUser(@RequestBody User user) {
-        return userService.createUser(user);
-    }
-
-    @PutMapping("/{id}")
+    @PutMapping("/{id}/update-profile")
     public User updateUser(@PathVariable Long id, @RequestBody User user) {
         return userService.updateUser(id, user);
     }

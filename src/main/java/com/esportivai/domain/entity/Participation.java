@@ -1,4 +1,4 @@
-package com.esportivai_api.domain.entity;
+package com.esportivai.domain.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;

@@ -1,7 +1,7 @@
-package com.esportivai_api.application.usecase;
+package com.esportivai.application.usecase;
 
-import com.esportivai_api.domain.entity.User;
-import com.esportivai_api.domain.repository.UserRepository;
+import com.esportivai.domain.entity.User;
+import com.esportivai.domain.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

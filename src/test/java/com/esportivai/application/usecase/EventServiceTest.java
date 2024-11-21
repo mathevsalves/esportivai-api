@@ -1,7 +1,7 @@
-package com.esportivai_api.application.usecase;
+package com.esportivai.application.usecase;
 
-import com.esportivai_api.domain.entity.Event;
-import com.esportivai_api.domain.repository.EventRepository;
+import com.esportivai.domain.entity.Event;
+import com.esportivai.domain.repository.EventRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -31,14 +31,14 @@ class EventServiceTest {
     @Test
     void shouldCreateEvent() {
         Event event = new Event();
-        event.setName("Sample Event");
+        event.setEventName("Sample Event");
         event.setDescription("Description of Sample Event");
 
         when(eventRepository.save(event)).thenReturn(event);
 
         Event createdEvent = eventService.createEvent(event);
 
-        assertEquals("Sample Event", createdEvent.getName());
+        assertEquals("Sample Event", createdEvent.getEventName());
         verify(eventRepository, times(1)).save(event);
     }
 
@@ -57,18 +57,18 @@ class EventServiceTest {
     @Test
     void shouldUpdateEvent() {
         Event event = new Event();
-        event.setId(1L);
-        event.setName("Initial Event");
+        event.setEventId(1L);
+        event.setEventName("Initial Event");
 
         when(eventRepository.findById(1L)).thenReturn(Optional.of(event));
         when(eventRepository.save(event)).thenReturn(event);
 
         Event updatedEvent = new Event();
-        updatedEvent.setName("Updated Event");
+        updatedEvent.setEventName("Updated Event");
 
         Event result = eventService.updateEvent(1L, updatedEvent);
 
-        assertEquals("Updated Event", result.getName());
+        assertEquals("Updated Event", result.getEventName());
         verify(eventRepository, times(1)).save(event);
     }
 

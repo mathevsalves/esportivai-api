@@ -1,0 +1,492 @@
+openapi: 3.0.0
+info:
+  title: Esportivai API
+  version: 1.0.0
+  description: API para gerenciamento de usuários, eventos, participações e convites.
+
+paths:
+  /api/auth/register:
+    post:
+      summary: Cadastro de novos usuários
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                email:
+                  type: string
+                password:
+                  type: string
+                location:
+                  type: string
+                skill_level:
+                  type: string
+                  enum: [beginner, intermediate, advanced]
+              required: [name, email, password]
+      responses:
+        '201':
+          description: Usuário criado com sucesso
+
+  /api/auth/login:
+    post:
+      summary: Autenticação de usuário
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+              required: [email, password]
+      responses:
+        '200':
+          description: Token de autenticação JWT
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+
+  /api/auth/forgot-password:
+    post:
+      summary: Solicitação para recuperação de senha
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+              required: [email]
+      responses:
+        '200':
+          description: Confirmação de envio de e-mail de recuperação
+
+  /api/users/{userId}:
+    get:
+      summary: Obter informações do perfil do usuário
+      parameters:
+        - in: path
+          name: userId
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Dados do usuário
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  name:
+                    type: string
+                  email:
+                    type: string
+                  location:
+                    type: string
+                  skill_level:
+                    type: string
+
+    put:
+      summary: Atualização dos dados de perfil do usuário
+      parameters:
+        - in: path
+          name: userId
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                location:
+                  type: string
+                skill_level:
+                  type: string
+      responses:
+        '200':
+          description: Perfil atualizado com sucesso
+
+  /api/events:
+    post:
+      summary: Criação de um novo evento
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                event_name:
+                  type: string
+                description:
+                  type: string
+                sport:
+                  type: string
+                date:
+                  type: string
+                  format: date
+                time:
+                  type: string
+                  format: time
+                location:
+                  type: string
+                max_participants:
+                  type: integer
+                skill_level:
+                  type: string
+                status:
+                  type: string
+                  enum: [public, private]
+              required: [event_name, sport, date, time, skill_level, status]
+      responses:
+        '201':
+          description: Evento criado com sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  event_id:
+                    type: integer
+
+    get:
+      summary: Listagem de eventos públicos
+      parameters:
+        - in: query
+          name: sport
+          schema:
+            type: string
+        - in: query
+          name: date
+          schema:
+            type: string
+            format: date
+        - in: query
+          name: location
+          schema:
+            type: string
+        - in: query
+          name: skill_level
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Lista de eventos
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    event_id:
+                      type: integer
+                    event_name:
+                      type: string
+                    date:
+                      type: string
+                      format: date
+                    time:
+                      type: string
+                      format: time
+                    location:
+                      type: string
+                    skill_level:
+                      type: string
+
+  /api/events/{eventId}:
+    get:
+      summary: Obter detalhes de um evento específico
+      parameters:
+        - in: path
+          name: eventId
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Detalhes do evento
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  event_name:
+                    type: string
+                  description:
+                    type: string
+                  sport:
+                    type: string
+                  date:
+                    type: string
+                    format: date
+                  time:
+                    type: string
+                    format: time
+                  location:
+                    type: string
+                  participants:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        name:
+                          type: string
+                        skill_level:
+                          type: string
+                  invitations:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        user_id:
+                          type: integer
+                        status:
+                          type: string
+
+    put:
+      summary: Atualização dos detalhes de um evento
+      parameters:
+        - in: path
+          name: eventId
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                event_name:
+                  type: string
+                description:
+                  type: string
+                location:
+                  type: string
+                status:
+                  type: string
+                  enum: [public, private]
+      responses:
+        '200':
+          description: Evento atualizado com sucesso
+
+    delete:
+      summary: Exclusão de um evento
+      parameters:
+        - in: path
+          name: eventId
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Evento cancelado com sucesso
+
+  /api/events/{eventId}/join:
+    post:
+      summary: Inscrição do usuário em um evento
+      parameters:
+        - in: path
+          name: eventId
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user_id:
+                  type: integer
+      responses:
+        '200':
+          description: Inscrição confirmada
+
+  /api/events/{eventId}/leave:
+    delete:
+      summary: Cancelamento da participação do usuário em um evento
+      parameters:
+        - in: path
+          name: eventId
+          required: true
+          schema:
+            type: integer
+        - in: query
+          name: userId
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Participação cancelada
+
+  /api/events/{eventId}/participants:
+    get:
+      summary: Obter a lista de participantes confirmados em um evento
+      parameters:
+        - in: path
+          name: eventId
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Lista de participantes confirmados
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                    skill_level:
+                      type: string
+
+  /api/users/{userId}/participations:
+    get:
+      summary: Listagem de eventos nos quais o usuário está inscrito
+      parameters:
+        - in: path
+          name: userId
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Lista de eventos
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    event_id:
+                      type: integer
+                    event_name:
+                      type: string
+
+  /api/events/{eventId}/invite:
+    post:
+      summary: Enviar convite para um usuário participar de um evento
+      parameters:
+        - in: path
+          name: eventId
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user_id:
+                  type: integer
+      responses:
+        '200':
+          description: Convite enviado com sucesso
+
+  /api/events/{eventId}/invitations:
+    get:
+      summary: Obter a lista de convites enviados para um evento
+      parameters:
+        - in: path
+          name: eventId
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Lista de convites enviados
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    invitation_id:
+                      type: integer
+                    user_id:
+                      type: integer
+                    status:
+                      type: string
+
+  /api/invitations/{invitationId}/accept:
+    put:
+      summary: Aceitar convite para um evento
+      parameters:
+        - in: path
+          name: invitationId
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Convite aceito com sucesso
+
+  /api/invitations/{invitationId}/decline:
+    put:
+      summary: Recusar convite para um evento
+      parameters:
+        - in: path
+          name: invitationId
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Convite recusado com sucesso
+
+  /api/users/{userId}/invitations:
+    get:
+      summary: Listar convites recebidos por um usuário
+      parameters:
+        - in: path
+          name: userId
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Lista de convites recebidos
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    invitation_id:
+                      type: integer
+                    event_name:
+                      type: string
+                    status:
+                      type: string

@@ -1,7 +1,7 @@
-package com.esportivai_api.application.usecase;
+package com.esportivai.application.usecase;
 
-import com.esportivai_api.domain.entity.User;
-import com.esportivai_api.domain.repository.UserRepository;
+import com.esportivai.domain.entity.User;
+import com.esportivai.domain.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -58,7 +58,7 @@ class UserServiceTest {
     @Test
     void shouldUpdateUser() {
         User user = new User();
-        user.setId(1L);
+        user.setUserId(1L);
         user.setName("John Doe");
 
         when(userRepository.findById(1L)).thenReturn(Optional.of(user));

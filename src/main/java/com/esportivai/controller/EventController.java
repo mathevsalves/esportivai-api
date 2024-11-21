@@ -1,10 +1,11 @@
-package com.esportivai_api.controller;
+package com.esportivai.controller;
 
-import com.esportivai_api.application.usecase.EventService;
-import com.esportivai_api.domain.entity.Event;
+import com.esportivai.application.usecase.EventService;
+import com.esportivai.domain.entity.Event;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/events")
@@ -13,6 +14,11 @@ public class EventController {
 
     public EventController(EventService eventService) {
         this.eventService = eventService;
+    }
+
+    @GetMapping("/{id}")
+    public Optional<Event> getEventById(@PathVariable("id") String id) {
+        return eventService.getEventById(Long.valueOf(id));
     }
 
     @GetMapping
