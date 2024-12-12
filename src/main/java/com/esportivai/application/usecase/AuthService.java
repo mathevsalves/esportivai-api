@@ -1,11 +1,15 @@
 package com.esportivai.application.usecase;
 
+import com.esportivai.domain.dtos.JwtResponse;
+import com.esportivai.domain.dtos.LoginRequest;
+import com.esportivai.domain.dtos.UserDto;
 import com.esportivai.domain.entity.User;
 import com.esportivai.domain.repository.UserRepository;
 import com.esportivai.security.JwtTokenProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -20,22 +24,21 @@ public class AuthService {
 
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
-    public String register(User user) {
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        userRepository.save(user);
-        return "User registered successfully!";
+    @Transactional
+    public User register(UserDto userDto) {
+        User user = new User();
+        user.setName(userDto.getName());
+        user.setEmail(userDto.getEmail());
+        user.setPassword(passwordEncoder.encode(userDto.getPassword()));
+        return userRepository.save(user);
     }
 
-    public String login(String email, String password) {
-        Optional<User> user = userRepository.findByEmail(email);
-        if (user.isPresent() && passwordEncoder.matches(password, user.get().getPassword())) {
-            return jwtTokenProvider.generateToken(email);
+    public JwtResponse login(LoginRequest loginRequest) {
+        Optional<User> user = userRepository.findByEmail(loginRequest.getEmail());
+        if (user.isPresent() && passwordEncoder.matches(loginRequest.getPassword(), user.get().getPassword())) {
+            return new JwtResponse(jwtTokenProvider.generateToken(loginRequest.getEmail()));
         }
-        throw new RuntimeException("Invalid credentials!");
+            return null;
     }
 
-    public String forgotPassword(String email) {
-        // Simular envio de e-mail
-        return "Password recovery instructions sent to " + email;
-    }
 }

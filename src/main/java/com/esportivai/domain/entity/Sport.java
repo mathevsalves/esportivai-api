@@ -5,14 +5,13 @@ import lombok.Data;
 
 @Data
 @Entity
-public class Participation {
+public class Sport {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    private User user;
+    @Column(nullable = false, unique = true)
+    private String name;
 
-    @ManyToOne
-    private Event event;
 }

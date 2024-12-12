@@ -7,15 +7,18 @@ import lombok.Data;
 @Entity
 @Table(name = "users")
 public class User {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_id")
-    private Long userId;
+    private Long id;
+
+    @Column(nullable = false, unique = true)
     private String name;
-    private String birthDate;
+
+    @Column(nullable = false, unique = true)
     private String email;
+
+    @Column(nullable = false, unique = true)
     private String password;
-    private String phone;
-    @Column(name = "skill_level")
-    private String skillLevel;
+
 }

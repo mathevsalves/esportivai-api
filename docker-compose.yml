@@ -1,0 +1,13 @@
+services:
+  esportivai.db:
+    image: mysql:8.0
+    container_name: esportivai_mysql_db
+    ports:
+      - '3307:3306'
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: esportivai
+    volumes:
+      - mysql.esportivai:/var/lib/mysql
+volumes:
+  mysql.esportivai:

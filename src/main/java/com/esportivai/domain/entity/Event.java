@@ -12,22 +12,28 @@ import java.time.LocalTime;
 public class Event {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "event_id")
-    private Long eventId;
-    @Column(name = "event_name")
-    private String eventName;
-    private String description;
-    @Column(name = "event_date")
-    private LocalDate eventDate;
-    @Column(name = "event_time")
-    private LocalTime eventTime;
+    private Long id;
+
+    private String name;
+
+    @Column(name = "sport_id")
+    private Integer sportId;
+
+    private LocalDate date;
+
+    private LocalTime time;
+
     private String location;
+
     @Column(name = "max_participants")
     private Integer maxParticipants;
+
     @Column(name = "skill_level")
     private String skillLevel;
-    private String status;
+
+
+
     @Column(name = "organizer_id")
-    private Integer organizerId;
+    private Long organizerId;
 }
 
